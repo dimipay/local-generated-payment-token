@@ -135,13 +135,16 @@ HMAC(K, C)
 
 uuid v4에서 `-`를 제거한 값.
 
-#### 6) **Encrypted Payment Code**
+#### 6) Encrypted Payment Code
 
 키오스크는 결제를 진행하기 위해 결제 수단이 무엇인지만 알면 된다. 하지만, 이것을 바코드에 바로 노출할 순 없기 때문에 암호화를 진행한다.
 
-암호화는 RAS 알고리즘을 사용한다.
+암호화에 RSASSA-PSS를 사용한다.
 
-Cipher type: RSA/ECB/OAEPWithSHA-256AndMGF1Padding
+- Key Size: 2048 bits
+- Hash Algorithm: SHA-256
+- MGF1 HashAlgorithm: SHA-256
+- Salt Length: 16
 
 ## 예제
 
