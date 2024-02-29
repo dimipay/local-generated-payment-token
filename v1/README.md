@@ -144,7 +144,7 @@ uuid v4에서 `-`를 제거한 값.
 - Key Size: 2048 bits
 - Hash Algorithm: SHA-256
 - MGF1 HashAlgorithm: SHA-256
-- Salt Length: 16
+- Salt Length: 32
 
 ## 예제
 
