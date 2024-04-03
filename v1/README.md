@@ -59,15 +59,17 @@ base64(275 byte) → 368 chars in QR
 
 이는 QR version 13의 Error Correction Level이 L 일때 [최대 수용 가능 bit 수](https://www.qrcode.com/en/about/version.html) 2,960 bits 안에 포함된다.
 
-- 왜 version 13인가?
-
+<details>
+    <summary>왜 version 13인가?</summary>
     QR코드가 너무 커지면 안된다. 나는 그 한계선을 alignment의 개수가 최대 6개 까지 있는 QR로 정했고, version 13이 alignment가 6개인 마지막 QR 버전이다.
-
+    </br>
     만약 base64 인코딩 길이가 너무 길어지면 어떡할까? 이땐 base 64 인코딩을 하지 않고 binary값을 QR코드에 그대로 넣는것으로 길이를 줄일 수 있다. 지금도 base 64 인코딩을 하지 않는다면 2,200 bits만 사용하면 된다.  
+</details>
 
-- 왜 Error Correction Level을 L로 하는가?
-
+<details>
+    <summary>왜 Error Correction Level을 L로 하는가?</summary>
     이는 말 그대로 QR코드 손상에 대처하기 위해 있는것이다. 우리에게 적용된다면 스크린이 박살난 기기에서 결제를 가능하게 해줄 수 있는 장치에 불과하다. 그리고 당연히 단계가 높을수록 저장할 수 있는 정보의 길이도 줄어든다. 따라서 L을 선택했다.
+</details>
 
 #### 1) Prefix
 
@@ -91,11 +93,11 @@ base64(275 byte) → 368 chars in QR
 
 버저닝 규칙
 
-major 버전이 같고  minor버전이 다른경우, 결제 코드는 호환가능하다 → 앱 업데이트가 필요없음.
+1. major 버전이 같고  minor버전이 다른경우, 결제 코드는 호환가능하다 → 앱 업데이트가 필요없음.
 
-major 버전이 다른경우, 결제는 불가능하며, 앱 업데이트가 필요할 수도 있다.
+2. major 버전이 다른경우, 결제는 불가능하며, 앱 업데이트가 필요할 수도 있다.
 
-major 버전이 32를 넘어가면 prefix를 변경하고 버전은 0.0v부터 다시 카운팅한다.
+3. major 버전이 32를 넘어가면 prefix를 변경하고 버전은 0.0v부터 다시 카운팅한다.
 
 #### 3) User UUID, Device UUID & MID
 
@@ -131,7 +133,7 @@ HMAC(K, C)
 
 #### 5) Nonce
 
-한 번 결제에 사용된 코드를 다시 사용할 수 있게 하기 위해 nonce값을 사용한다.
+한 번 결제에 사용된 코드를 다시 사용할 수 없없게 하기 위해 nonce값을 사용한다.
 
 uuid v4에서 `-`를 제거한 값.
 
@@ -146,7 +148,7 @@ uuid v4에서 `-`를 제거한 값.
 - MGF1 HashAlgorithm: SHA-256
 - Salt Length: 32
 
-## 예제
+## 예제 (Outdated)
 
 사용자 등록부터 결제 코드 생성까지의 데모이다. 서버와 클라이언트의 역할을 나타내기 위해 서버는 주황색, 클라이언트는 파란색을 사용한다.
 
