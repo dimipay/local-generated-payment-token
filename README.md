@@ -1,1 +1,1 @@
-## Local Generated Payment Code
+# Local Generated Payment Code
