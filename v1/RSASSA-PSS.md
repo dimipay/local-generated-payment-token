@@ -1,2 +1,0 @@
-# RSSSSA-PSS
-
