@@ -1,5 +1,7 @@
 # Local Generated Pay Code
 
+Version: 0.1 (1)
+
 ## Goal / Preconditions
 
 1. 통신이 없는 환경에서 결제 승인을 낼 수 있는 코드를 발급한다.
