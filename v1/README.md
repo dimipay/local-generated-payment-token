@@ -2,7 +2,7 @@
 
 Version: 0.1 (1)
 
-## Goal / Preconditions
+## 1. Abstract
 
 1. 통신이 없는 환경에서 결제 승인을 낼 수 있는 코드를 발급한다.
 2. 결제는 키오스크에서 진행하며 키오스크는 인터넷 연결이 되어있다.
@@ -12,19 +12,43 @@ Version: 0.1 (1)
 6. 생성된 코드는 30초 이내로 만료되어야 한다.
 7. 결제코드 생성 알고리즘은 모두가 알고있다고 가정한다.
 8. 결제 코드를 통해 카드 ID 등을 알아낼 수 없어야 하고, 이를 유도하여 결제 코드를 생산할 수 없어야 한다.
-9. QR코드는 다음 조건으로 생성된다.
-    - Error Correction Level: L
-    - Maximum version: 13
-    - base64 인코딩 결과를 사용한다.
-    - Byte 모드로 인코딩 한다.
 
-## Abstract
+## 2. Normative References
 
-Local Generated Pay Code(로컬 생성 결제 코드)는 금융정보화추진협의회에서 관리되는 "[모바일 지금수단 표준-QR코드](archive/모바일%20직불서비스%20표준%20-%20QR코드.pdf)"(2018/12) 표준을 기반으로 제작된 디미페이의 자체 표준이다.
+- [모바일 지금수단 표준-QR코드](archive/모바일%20직불서비스%20표준%20-%20QR코드.pdf)(2018/12) - 로컬 생성 결제 코드는 해당 표준을 기반으로 작성된다.
+- [KS X ISO/IEC 18004](https://standard.go.kr/streamdocs/view/sd;streamdocsId=72059307369834348) - 정보 기술 - 자동인식 및 데이터 획득 기술 - 기호 사양 - QR 코드
 
-## Specification
+## QR code
 
-결제 코드는 다음 세 부분으로 구성된다.
+QR 코드는 다음 형식으로 생성합니다.
+
+- 최종 바이너리 결제 코드를 Base64로 인코딩한다.
+- Error Correction Level: L
+- Maximum version: 13
+- Byte 모드로 인코딩 한다.
+
+<details>
+    <summary><b>QR 코드는 어디까지 커질 수 있을까?</b></summary>
+    QR코드가 너무 커지면 안되기 때문에 QR코드의 정렬 패턴이 6개가 넘지않는 QR 코드를 만들기를 권장한다. 버전 13이 정렬 패턴이 6개인 마지막 버전이다.
+    <br />
+    만약 base64 인코딩 길이가 너무 길어지면 어떡할까? 이땐 binary값을 사용하여 길이를 줄여볼 수 있다. 현재 명세로 만들어지는 코드는 2,200 bits이다.
+</details>
+
+<br />
+ 
+<details>
+    <summary><b>왜 Error Correction Level을 L로 할까?</b></summary>
+    ECC level은 QR코드 손상에 대처하기 위해 존재한다. 인쇄된 코드나 QR에 이미지를 삽입할 때 유용한다. 하지만 스크린에 QR을 보여주는 경우, ECC level을 높이는 것은 사치이다. 그리고 당연히 레벨이 높을수록 저장할 수 있는 정보의 양은 줄어든다. 따라서 L을 선택하는것은 합리적이다.
+</details>
+
+## Payload
+
+결제 코드의 페이로드는 다음 부분으로 구성된다.
+
+- Prefix (접두사)
+- Algorithm version (알고리즘 버전)
+- User UUID (사용자 UUID)
+- Encrypted authentication 
 
 ```text
 Base64([Prefix][Algorithm version][user uuid]Encrypt([device uuid][MID][HMAC][Nonce]))
@@ -37,19 +61,6 @@ QR 코드에서 Byte mode는 문자열 하나당 8 bits를 사용하므로 총 �
 
 Error Correction Level을 L로 설정하면 QR코드 버전은 12가 된다.
 
-<details>
-    <summary><b>QR 코드는 어디까지 커질 수 있을까?</b></summary>
-    QR코드가 너무 커지면 안되기 때문에 QR코드의 alignment가 6개가 넘지않는 QR 코드를 만들기를 권장한다. 버전 13이 alightment가 6개인 마지막 버전이다.
-    <br />
-    만약 base64 인코딩 길이가 너무 길어지면 어떡할까? 이땐 binary값을 사용하여 길이를 줄여볼 수 있다. 현재 명세로 만들어지는 코드는 2,200 bits이다.
-</details>
-
-<br />
- 
-<details>
-    <summary><b>왜 Error Correction Level을 L로 할까?</b></summary>
-    ECC level은 QR코드 손상에 대처하기 위해 존재한다. 인쇄된 코드나 QR에 이미지를 삽입할 때 유용한다. 하지만 스크린에 QR을 보여주는 경우, ECC level을 높이는 것은 사치이다. 그리고 당연히 레벨이 높을수록 저장할 수 있는 정보의 양은 줄어든다. 따라서 L을 선택하는것은 합리적이다.
-</details>
 
 ### 1. Prefix
 
