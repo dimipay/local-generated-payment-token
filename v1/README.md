@@ -93,7 +93,7 @@ Error Correction Level을 L로 설정하면 QR코드 버전은 12가 된다.
 
 ### 3. User UUID, Device UUID & MID
 
-UUID에서 `-`를 제거하여 사용한다.  `-`를 제거하여 저장해두어도 괜찮다.
+UUID에서 `-`를 제거하여 사용한다. `-`를 미리 제거하여 저장해두어도 괜찮다.
 
 ex) `c5d1a458-cb07-41e9-8545-9a5564ea0074` → `c5d1a458cb0741e985459a5564ea0074`
 
@@ -194,27 +194,55 @@ Time window가 1이라도 항상 연산을 할 필요는 없다. 연산은 오�
 
 ## 예제
 
-사용자 등록부터 결제 코드 생성까지의 예제이다.
-
-### 1.  Sign up
+### 1. 사전 정보
 
 새로운 사용자가 등록되면 서버는 2048 bits RSA 키를 생성한다.
 
-- Public key
+- Public key (PKCS1)
 
 ```text
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA48g6HZ8XOslUNeBI3q/7emQ8EjpxmqALN75gcJAuEwPKR1Px2eiE+cv4gSs+yXkWdL0cxgs5Av+6qPj8pCK2ogBfABAdLBulHEoeHL6EJOOvXiXVlN+SX6FqgaaSWUsSEgn9CcrRKtFu+4YGLfgsXSONkVjHflwW4JFW+20NnyB03dvNM9p8+1wYVkLnWfcq69ibT854CvgffmqFDX84GXx1lcymPI5rKG1ES8Qd/o92GLde5H1EGPXP+hvYX5o71BuFxVY4lGQFGqPMYI8ChgAdoznt9jsL5HU68VJ0AUrUEHTXbvu3u8XJQyt+IgocT/uK450pQOW6j8iBGXlNUwIDAQAB
+-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEA6zZTB42ogxuC7TJYpYQdMvZ1sew+7T+qCThPgf09/a/ZhgtVOPg9
+x1+x1hi1W7Znf4aekRpeUlNnhGDvhOlu7MUGa2ZaiuEemUWFvElsv+/DV8KfooU3
+6Vol8p2VTkREiS5a1KcC3hDslnEaKGzJp2kigDKqHuilO1gmKEMrHUFBecxmegfn
++O2Z7AtNyMO3tGXcRdlcQuA/nYtcUYXTh/ek3z7j3Fxp42hB9+8vbzNMq4XlZBfZ
+cosBtIJU0hnnzL9QLC1gnvNg1y7si81ssJDrBhZRDRv8hPnXUaaT4sbijg54FeIs
+dphmnyCIz8AHmJr0M3sCqVyJe1b5MBUJFwIDAQAB
+-----END RSA PUBLIC KEY-----
 ```
 
-- Private key
+- Private key (PKCS8)
 
 ```text
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDjyDodnxc6yVQ14Ejer/t6ZDwSOnGaoAs3vmBwkC4TA8pHU/HZ6IT5y/iBKz7JeRZ0vRzGCzkC/7qo+PykIraiAF8AEB0sG6UcSh4cvoQk469eJdWU35JfoWqBppJZSxISCf0JytEq0W77hgYt+CxdI42RWMd+XBbgkVb7bQ2fIHTd280z2nz7XBhWQudZ9yrr2JtPzngK+B9+aoUNfzgZfHWVzKY8jmsobURLxB3+j3YYt17kfUQY9c/6G9hfmjvUG4XFVjiUZAUao8xgjwKGAB2jOe32OwvkdTrxUnQBStQQdNdu+7e7xclDK34iChxP+4rjnSlA5bqPyIEZeU1TAgMBAAECggEAAwu6CIwIYdHasr8QBQzyCOiZi7OFB13yfclUPXfAFfhWq8N/QrxYODA2X3Z2PXgas8Q/mT+sgHzDld+BHqoUKnBk1M8NBM+jJ+YEfGU+cRvWTCT8s86VhM/XaRUSyeeLaKWs4NpPF7Ul4xkfW11Wgob81/UJnd1EtQtceroyP27Hi2tdcMkcOPDVX5ZFOdkp2/T4ER+9WNqFRrHBits90p09INc1GIRrM1QDjB0RkNWPDU++ar0JRbUy8/cAN2686GOI4l4goFqxqcXaok8Y//gBNRRRXPzFMr544CIOcal6cZsBmhwczwjRRHvadJmz/rFFRuR4cnYi1fzieLwjEQKBgQD4GEQco8wovM76lJRfO1xx1uInpjPmBUe0j7R0sqme4Wcdq1R5OErB/szaQinSdXmbS9veFN2w/1T3DKz62yIFaGGMWUsXuW8NKlhkrEbxO4Ql2rbTM56yFe2R8Nln7gsG1ZFVUZZOqVLuFkZ48s3yVrTAQ7YR8V0rrS+8vwaZiwKBgQDrCkTESTNUU6pVn+YwDrc99tOVno88D6j6sXPgdkKO15D88ayuBawIRmMao6pbumsXZ9dlNdUgwj4DVdVAUwQjlx+/zecA+F4565EauuJRP0jkSJomjQPnb2SeZ+fKCh5e+gCpB/WlsatX00YfDRt3d2XEDYYaclIiwyD1WM9EWQKBgB9vc7HtT0EaK1+009f9PYlvINjFRm4u3RcT3lmrCbMH/HjV7K4vY8mQ74P4PjRcjjwPMJzDKBP1Rl7HTGO8wGLPBw0xg0JOTLPuWaTn71VBpUzmmaPJNqJ6BNApJGL21o7XIMMew1zUN53TVLqeiVnbgquZ6Mf9PUD7gMD5s2xhAoGAQbaOQV7B5hq6LdRV1CvZGY7v2w4It98c/HIulpwZwbwNQlsDT2gwj+O2A5WspJa7KEEVHKvvWYhVNDOEOsa7CoRPER4tLr1CAumUmSeU7OhHpeOSjaKxa7xeIlekm302vpEhLCEYkenZoOVl3nqYqk8MecLaMnyx8BwkE9RvpokCgYEAtd+t9mxP3gmAW1HsAFv218YTgWraQNENDztZ0XmgfgVwCYRFOpDdBpiNO/bD/uWO3KHpd3zF3qT9/mzLEE/zxhU9ZFB+yz40LIJcnpZTUA7ZNL4Yq0iECl1jjMlqsy5AlcuZVq6I9kTT4kNIg9DjDPROv8kzwAaSNjEv0HZYpVY=
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDrNlMHjaiDG4Lt
+MlilhB0y9nWx7D7tP6oJOE+B/T39r9mGC1U4+D3HX7HWGLVbtmd/hp6RGl5SU2eE
+YO+E6W7sxQZrZlqK4R6ZRYW8SWy/78NXwp+ihTfpWiXynZVORESJLlrUpwLeEOyW
+cRoobMmnaSKAMqoe6KU7WCYoQysdQUF5zGZ6B+f47ZnsC03Iw7e0ZdxF2VxC4D+d
+i1xRhdOH96TfPuPcXGnjaEH37y9vM0yrheVkF9lyiwG0glTSGefMv1AsLWCe82DX
+LuyLzWywkOsGFlENG/yE+ddRppPixuKODngV4ix2mGafIIjPwAeYmvQzewKpXIl7
+VvkwFQkXAgMBAAECggEAcmXFAzb0HvQJ/RhQAgxb8TXqb0MyJcyhhAN1tAi5lkFp
+P+cSJ3ehAG97/F+fEUCJXP5Z78PN3SeAgONuiwvHrfNzmFe7MLGl4rDsBvQFJuLT
+dMMNRguZ8m4sZ7AZ9muAk+HOPoAOBnhfwRm4ObITb89T/trlX8wR1OeeA1YLyZlN
+LejaQDse+5xV+9Gj7ib0AKNuP9CTrPlFq66D0T7whbv5fg7uh/9XsNCsdaFGmcSY
+ZuLpUVwMh+Goro+voV9NYKoY1PMEsWmzwHGOm75wI4On/QztTkoVZH3Sm7NyeLUP
+t/BasqSN4K3XpmM9Xlhi0xFW7SJGhOL3Q/8aD4Sc+QKBgQD3PmE/n0A/yWQYTDCg
+F5+G3bnVGhH86MDmOlm7MyhE1KOELW+l8aVKeBxfQwWLZJsufxuKtGaR9YSx6wcV
+zz/mrGAsc5YG4Y2OZyG+n/xYUjj5WRgtV7drFhoTMcz9oW/LcviOk+B6udv/rps7
+MHeqvQmfTn0aiwda4IYzWVxPaQKBgQDzityju1BDVRHdR1WErDkXbRk1h+bHm8fG
+zQsjb4SGK26CZcGA1funbFqJbhz0ySPTDQ/doCsupcNN6v5xcch+ZN1NZ3dcJVSH
+ZOveSlrot7xak9fABRYWO7tWpJHsrERs927lYjlVE3NExpTEC8QeZKC/hVjbskwS
+tzZCJCwEfwKBgQDRLp3ozjv1u9ZMGGoriNEXshDAE8aUS/io0UWJ9MZlNeMCuc50
+f/ZxAx4+Gt5eCUiiFjifKfJ+G1OhlE/yS96ss7rK4SBVwg+aI/eQ6Jr/vtElZhPm
+iQhOOezlwITHMgb8AtH5D3QlYYqY0InVkjQs6LNzbVy7UFVwtfXVDA3lwQKBgBzS
+dkI6TMlrK+4QHyLQbwFCvBUFvF4rJX11jrfm3rwyL6Xm/PuOV3X88MoK6gpeM4sq
+pJIJ/pJKs85o3Sv3105+CWK7t/iDwnkzjGaGTjP0aqodjQ8AixiegRFD8LEdwgtT
+TSCAe2CCKMYe6kQ5UEB4kD2aPmXht/cPD7DMLxlpAoGAY2LN5zP8pHwawPj7TSUJ
+mWGF38VNcapYv/ezZfoXwIONsg6uDxcG2yS1RZ6IrkiCZq62HBpDtrfqfUda7Y82
+rhRc/XCRmH/iyBZyRYe2MMC44rS9pIynF1cH+FeWJ02B0aNdrpVYTQATZV4uY+aS
+/FasmHotKqyW7IuXMRLvnvE=
+-----END PRIVATE KEY-----
 ```
-
-### 2. 온보딩
-
-클라이언트는 온보딩에서 새로운 device id(uuid)를 함께 보내고, 온보딩에 성공하면 서버는 public key와 user uuid를 전달한다.
 
 - device uuid
 
@@ -228,18 +256,18 @@ de08c6af-9da1-4720-b7da-2e8ff962510f
 f2b21e91-6d31-4724-a4fb-bef956440fce
 ```
 
-### 3. 결제수단 등록
+### 2. 결제수단
 
-카드정보 입력 후 서버는 다음 값을 클라이언트에게 전달한다.
+결수 수단이 동록되면 클라이언트는 다음 값을 서버로부터 받는다.
 
 - payment method id (MID): `9fb961c8-187f-4b46-8f30-c76021cf3ed8`
 - OTP Secret (K):  `GoQnxXeW+fjlzo7JSTVcwcDFxME=`
 - payment method registered time(T0): `1705896544745`
 - OTP Interval(Tx): `30`
 
-클라이언트는 해당 값들을 안전하게 저장한다.
+클라이언트는 해당 값들을 기기에 안전하게 저장한다.
 
-### 4. Generate Payment Code
+### 3. QR 데이터 생성
 
 #### 1) Prefix
 
@@ -247,11 +275,7 @@ hex값 `44 50`을 사용한다.
 
 #### 2) Algorithm version
 
-hex값 `00`을 사용한다. (0.0v)
-
-```text
-00000000: 44 50 00                                         DP.
-```
+예시로 1.5 버전을 사용한다고하면, `00001 101`, hex 값으론 `13`을 사용한다.
 
 #### 3) User UUID
 
@@ -268,7 +292,7 @@ user uuid에서 `-`를 뺸 값을 추가한다.
 
 Math.floor((1705897217563 - 1705896544745) / 30) = `22427`
 
-SHA-256 알고리즘을 사용하면 다음과같다.
+SHA-256 알고리즘을 적용하면 다음과같다.
 
 ```text
 6e48fb06ddbe1e66cff7675f1010db12137b5175cf9eecba9200b15a856548d9
@@ -276,7 +300,7 @@ SHA-256 알고리즘을 사용하면 다음과같다.
 
 #### 5) Nonce 생성
 
-uuid v4로 nonce값을 생성한다. nonce 역시 uuid의 `-`를 제거한다.
+uuid v4로 nonce값을 생성한다.
 
 ```text
 bd3f28b163014ca4af8a802c482306f3
@@ -284,7 +308,7 @@ bd3f28b163014ca4af8a802c482306f3
 
 #### 6) 암호화
 
-문자열을 연결한다.
+준비된 값을 연결한다.
 
 [device uuid] [MID] [HMAC] [Nonce]
 
@@ -295,36 +319,36 @@ de08c6af9da14720b7da2e8ff962510f9fb961c8187f4b468f30c76021cf3ed86e48fb06ddbe1e66
 OAEP RSA 암호화.
 
 ```text
-696a630f6cb840894c0d77cb83d9c790822f39e45b99f983d243d18a8e7512941a8a01258ababa6ab507928d0754526e864239bee20494f8a0cdde78946a0422b3ebce8f2d8d135298583390fc6e7273a0fca6dc8fc43d597fcdc4eb80dc9e33d378a381a1f5b11fd6cc09551edec2e0f10d20bc740872a75f9b045b1478823b7b02eb1b7ed997f818fe6e909b9c27e340af9745637d845123dd12b10d0b08bf3015bf49353807466f5ed66d5651f984270e48d16e00b3d2fbb1642ebb1e7d664d934b15e6d11d09ab735b9b830cbe5c4b8b3e91eb32fc718484609c83c1db23d8a60c6202edf729ac566e7291032890033107fc6809f68911458c09789e9047
+7437f1517aa5c3ef30eea0a01002b114fce039c0c2b0e917fffff1aca09a3a35cf628f1405d0bd2661305a257223e25dce78ce108852822e2e78dce3b5f3d5f07c6294b8d4d0c5114eb246bfe0d03082227836353c7c3408dd92dd5df26221f19b5a0a7c0a74873c69dfc1e601aa69ffa4dbcbb1ecd626d31631331d92d873661caa8b1f708be9c6d0651bc841513f89937c48f04ac0968c75bb3a30392618971fe3b2d379278557a45d5eb2752ddd7f9c3245219d7c7f0efadf0337e05c18c31fbbacd3263d2429e5700550b92bce1e0d3ecc1291725ae1bd83ee7f60419b1202da325eb55cf014cb0cb4aa35dd8b2fb5f1e9374972e64290f3e50d3e743ad2
 ```
 
 전체 코드는 다음과 같다.
 
 ```text
-00000000: 44 50 00 F2 B2 1E 91 6D 31 47 24 A4 FB BE F9 56  DP.....m1G$....V
-00000010: 44 0F CE 69 6A 63 0F 6C B8 40 89 4C 0D 77 CB 83  D..ijc.l.@.L.w..
-00000020: D9 C7 90 82 2F 39 E4 5B 99 F9 83 D2 43 D1 8A 8E  ..../9.[....C...
-00000030: 75 12 94 1A 8A 01 25 8A BA BA 6A B5 07 92 8D 07  u.....%...j.....
-00000040: 54 52 6E 86 42 39 BE E2 04 94 F8 A0 CD DE 78 94  TRn.B9........x.
-00000050: 6A 04 22 B3 EB CE 8F 2D 8D 13 52 98 58 33 90 FC  j."....-..R.X3..
-00000060: 6E 72 73 A0 FC A6 DC 8F C4 3D 59 7F CD C4 EB 80  nrs......=Y.....
-00000070: DC 9E 33 D3 78 A3 81 A1 F5 B1 1F D6 CC 09 55 1E  ..3.x.........U.
-00000080: DE C2 E0 F1 0D 20 BC 74 08 72 A7 5F 9B 04 5B 14  ..... .t.r._..[.
-00000090: 78 82 3B 7B 02 EB 1B 7E D9 97 F8 18 FE 6E 90 9B  x.;{...~.....n..
-000000a0: 9C 27 E3 40 AF 97 45 63 7D 84 51 23 DD 12 B1 0D  .'.@..Ec}.Q#....
-000000b0: 0B 08 BF 30 15 BF 49 35 38 07 46 6F 5E D6 6D 56  ...0..I58.Fo^.mV
-000000c0: 51 F9 84 27 0E 48 D1 6E 00 B3 D2 FB B1 64 2E BB  Q..'.H.n.....d..
-000000d0: 1E 7D 66 4D 93 4B 15 E6 D1 1D 09 AB 73 5B 9B 83  .}fM.K......s[..
-000000e0: 0C BE 5C 4B 8B 3E 91 EB 32 FC 71 84 84 60 9C 83  ..\K.>..2.q..`..
-000000f0: C1 DB 23 D8 A6 0C 62 02 ED F7 29 AC 56 6E 72 91  ..#...b...).Vnr.
-00000100: 03 28 90 03 31 07 FC 68 09 F6 89 11 45 8C 09 78  .(..1..h....E..x
-00000110: 9E 90 47                                         ..G
+00000000: 44 50 F2 B2 1E 91 6D 31 47 24 A4 FB BE F9 56 44  DP....m1G$....VD
+00000010: 0F CE 74 37 F1 51 7A A5 C3 EF 30 EE A0 A0 10 02  ..t7.Qz...0.....
+00000020: B1 14 FC E0 39 C0 C2 B0 E9 17 FF FF F1 AC A0 9A  ....9...........
+00000030: 3A 35 CF 62 8F 14 05 D0 BD 26 61 30 5A 25 72 23  :5.b.....&a0Z%r#
+00000040: E2 5D CE 78 CE 10 88 52 82 2E 2E 78 DC E3 B5 F3  .].x...R...x....
+00000050: D5 F0 7C 62 94 B8 D4 D0 C5 11 4E B2 46 BF E0 D0  ..|b......N.F...
+00000060: 30 82 22 78 36 35 3C 7C 34 08 DD 92 DD 5D F2 62  0."x65<|4....].b
+00000070: 21 F1 9B 5A 0A 7C 0A 74 87 3C 69 DF C1 E6 01 AA  !..Z.|.t.<i.....
+00000080: 69 FF A4 DB CB B1 EC D6 26 D3 16 31 33 1D 92 D8  i.......&..13...
+00000090: 73 66 1C AA 8B 1F 70 8B E9 C6 D0 65 1B C8 41 51  sf....p....e..AQ
+000000a0: 3F 89 93 7C 48 F0 4A C0 96 8C 75 BB 3A 30 39 26  ?..|H.J...u.:09&
+000000b0: 18 97 1F E3 B2 D3 79 27 85 57 A4 5D 5E B2 75 2D  ......y'.W.]^.u-
+000000c0: DD 7F 9C 32 45 21 9D 7C 7F 0E FA DF 03 37 E0 5C  ...2E!.|.....7.\
+000000d0: 18 C3 1F BB AC D3 26 3D 24 29 E5 70 05 50 B9 2B  ......&=$).p.P.+
+000000e0: CE 1E 0D 3E CC 12 91 72 5A E1 BD 83 EE 7F 60 41  ...>...rZ.....`A
+000000f0: 9B 12 02 DA 32 5E B5 5C F0 14 CB 0C B4 AA 35 DD  ....2^.\......5.
+00000100: 8B 2F B5 F1 E9 37 49 72 E6 42 90 F3 E5 0D 3E 74  ./...7Ir.B....>t
+00000110: 3A D2                                            :.
 ```
 
 #### 7) Base64 인코딩
 
 ```text
-RFAA8rIekW0xRySk+775VkQPzmlqYw9suECJTA13y4PZx5CCLznkW5n5g9JD0YqOdRKUGooBJYq6umq1B5KNB1RSboZCOb7iBJT4oM3eeJRqBCKz686PLY0TUphYM5D8bnJzoPym3I/EPVl/zcTrgNyeM9N4o4Gh9bEf1swJVR7ewuDxDSC8dAhyp1+bBFsUeII7ewLrG37Zl/gY/m6Qm5wn40Cvl0VjfYRRI90SsQ0LCL8wFb9JNTgHRm9e1m1WUfmEJw5I0W4As9L7sWQuux59Zk2TSxXm0R0Jq3Nbm4MMvlxLiz6R6zL8cYSEYJyDwdsj2KYMYgLt9ymsVm5ykQMokAMxB/xoCfaJEUWMCXiekEc=
+RFDysh6RbTFHJKT7vvlWRA/OdDfxUXqlw+8w7qCgEAKxFPzgOcDCsOkX///xrKCaOjXPYo8UBdC9JmEwWiVyI+JdznjOEIhSgi4ueNzjtfPV8HxilLjU0MURTrJGv+DQMIIieDY1PHw0CN2S3V3yYiHxm1oKfAp0hzxp38HmAapp/6Tby7Hs1ibTFjEzHZLYc2YcqosfcIvpxtBlG8hBUT+Jk3xI8ErAlox1uzowOSYYlx/jstN5J4VXpF1esnUt3X+cMkUhnXx/DvrfAzfgXBjDH7us0yY9JCnlcAVQuSvOHg0+zBKRclrhvYPuf2BBmxIC2jJetVzwFMsMtKo13YsvtfHpN0ly5kKQ8+UNPnQ60g==
 ```
 
 문자열 길이가 368이라는 것을 확인할 수 있다.
@@ -334,25 +358,3 @@ RFAA8rIekW0xRySk+775VkQPzmlqYw9suECJTA13y4PZx5CCLznkW5n5g9JD0YqOdRKUGooBJYq6umq1
 Error Correction Level을 L로 하고, byte모드로 QR코드를 생성한다.
 
 ![result.png](static/result.png)
-
-## refs
-
-- References
-
-  - Dynamic Security Code Card: [https://www.securetechalliance.org/wp-content/uploads/Dynamic-Security-Code-Card-WP-Final-July-2020.pdf](https://www.securetechalliance.org/wp-content/uploads/Dynamic-Security-Code-Card-WP-Final-July-2020.pdf)
-  - HOTP on Wikipedia: [https://en.wikipedia.org/wiki/HMAC-based_one-time_password](https://en.wikipedia.org/wiki/HMAC-based_one-time_password)
-  - TOTP on Wikipedia: [https://en.wikipedia.org/wiki/Time-based_one-time_password](https://en.wikipedia.org/wiki/Time-based_one-time_password)
-  - Dynamic Data Authentication: [https://www.openscdp.org/scripts/tutorial/emv/DDA.html](https://www.openscdp.org/scripts/tutorial/emv/DDA.html)
-  - Reducing Payment Card Fraud by Shifting over to EMV Chip Technology: [https://www.cryptomathic.com/news-events/blog/reducing-payment-card-fraud-by-shifting-over-to-emv-chip-technology](https://www.cryptomathic.com/news-events/blog/reducing-payment-card-fraud-by-shifting-over-to-emv-chip-technology)
-
-  - emv
-
-    - EMV SAD on flylib: [https://flylib.com/books/en/4.365.1.88/1/](https://flylib.com/books/en/4.365.1.88/1/)
-    - EMV DDA on openscdp: [https://www.openscdp.org/scripts/tutorial/emv/DDA.html](https://www.openscdp.org/scripts/tutorial/emv/DDA.html)
-
-  - How toadd additional security layers? (refs)
-
-    - **Zero-knowledge proof:** [https://en.wikipedia.org/wiki/Zero-knowledge_proof](https://en.wikipedia.org/wiki/Zero-knowledge_proof)
-    - **Non-interactive zero-knowledge proof:** [https://en.wikipedia.org/wiki/Zero-knowledge_proof](https://en.wikipedia.org/wiki/Zero-knowledge_proof)
-    - **Zero-knowledge password proof:** [https://en.wikipedia.org/wiki/Zero-knowledge_password_proof](https://en.wikipedia.org/wiki/Zero-knowledge_password_proof)
-    - **New Techniques for Non-interactive Zero-Knowledge**: [https://inst.eecs.berkeley.edu/~cs276/fa20/notes/New Techniques for NIZK.pdf](https://inst.eecs.berkeley.edu/~cs276/fa20/notes/New%20Techniques%20for%20NIZK.pdf)
