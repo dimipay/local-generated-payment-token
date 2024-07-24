@@ -1,6 +1,6 @@
 # Local Generated Pay Token
 
-Document Version: 0.2.0
+Document Version: 0.3.0
 
 ## Tabel of Contents
 
@@ -13,7 +13,8 @@ Document Version: 0.2.0
     3. Authentication
     4. Payload
     5. QR Code Encoding
-
+    
+A. Annex A - Example
 
 ## 1. Introduction
 
@@ -111,8 +112,10 @@ CD는 PS로 부터 암호키를 받기위해 안전한 전송 프로토콜을 �
 
 토큰 페이로드는 다음으로 구성됩니다.
 
-- Prefix (접두사)
-- Version (버전)
+- Metadata
+    - Payload Format Indicator (페이로드 포멧 지시자)
+    - Application Identifier (애플리케이션 식별자)
+    - Version (버전)
 - Auth Type (인증 유형)
 - User Identifier (사용자 식별자)
 - Encrypted payload
@@ -121,11 +124,17 @@ CD는 PS로 부터 암호키를 받기위해 안전한 전송 프로토콜을 �
     - HMAC
     - Nonce
 
-#### 4.3.1. Prefix
+#### 4.4.1. Payload Format Indicator
 
-토큰이 LGPT임을 나타내는 접두사는 애플리케이션을 식별할 수 있는 6바이트 이하로 설정합니다.
+페이로드 포멧 지시자는 토큰이 LGPT임을 나타내냅니다. `0x4c 0x50` 값을 사용합니다.
 
-#### 4.3.2. Version
+#### 4.4.2. Application Identifier
+
+토큰이 만들어진 애플리케이션을 나타냅니다. 4바이트를 사용하며, 남은 자리는 `0xff`로 채웁니다.
+
+`0x44 0x50` -> `0x44 0x50 0xff 0xff`
+
+#### 4.4.3. Version
 
 버전은 LGPT의 사양 버전을 나타내는 1바이트 정보입니다.
 버전의 첫 4비트는 major 버전, 다음 4비트는 minor 버전을 나타냅니다.
@@ -139,7 +148,7 @@ CD는 PS로 부터 암호키를 받기위해 안전한 전송 프로토콜을 �
 
 버전은 문서 자체의 버전과 동일합니다. major 버전은 코어 스펙 변경, minor 버전은 보안 수정 등의 변경, 그리고 patch 버전은 문서 수준의 수정이 발생했을 때 업데이트됩니다. 버전 호환성은 서버 구현에 따라 달라지며, 서버는 최신 major만 지원하는것이 좋습니다.
 
-#### 4.3.3. Auth Type
+#### 4.4.4. Auth Type
 
 인증 유형을 1바이트 정보입니다. 사양에서 정의하는 유형은 `0xxx xxxx` 형식을 따릅니다. 사용자 정의 유형은 `1xxx xxxx` 형식을 사용합니다. 미리 정의된 인증 유형은 다음과 같습니다.
 
@@ -153,11 +162,11 @@ CD는 PS로 부터 암호키를 받기위해 안전한 전송 프로토콜을 �
 
 사용자 지정 유형은 `1000 0001(0x81)`과 같이 정의할 수 있습니다.
 
-#### 4.3.4. User Identifier
+#### 4.4.5. User Identifier
 
 사용자 식별자는 구현에따라 다릅니다. 하지만 사용자 식별자를 시퀀스로 번호로 사용하는것은 권장하지 않습니다. 다른 임의의 사용자 식별자를 쉽게 알 수 있다면 위조 감지를 발생하여 다른 사용자의 결제를 불가능하게 만드는 공격이 가능해집니다.
 
-#### 4.3.5. HMAC
+#### 4.4.6. HMAC
 
 토큰 유효 시간 인증하기위해 HMAC을 사용합니다. HMAC 파라미터에는 K(secret key)와 m(인증할 메시지)이 있습니다. K는 Auth token이고, m은 카운터(C)입니다. 카운터는 다음 공식으로 계산됩니다.
 
@@ -172,7 +181,7 @@ $$
 
 HAMC에 사용되는 해시함수는 SHA2 또는 SHA3를 사용하기를 권장합니다.
 
-#### 4.3.6. Time Window
+#### 4.4.7. Time Window
 
 카운터를 계산법의 특성상 카운터를 계산했을 당시 카운터의 유효시간이 얼마 남지 않을 수도 있을 가능성이 존재합니다. 이를 해결하기 위한 일반적인 방법은 현재 시각을 기준으로 ±n 개의 HMAC값을 허용하는 것입니다. 이를 Time window라고합니다.
 
@@ -180,13 +189,13 @@ HMAC 값을 무작위 대입으로 맞추는것은 거의 불가능하기때문�
 
 HMAC 비교에 실패했다고 무조건 Time window를 고려하지 않아도 됩니다. 연산은 Time window 가능성이 있을때, 즉 HMAC 사이클 종료 시간이 가까워 졌을때만 수행하는것이 보안상 좋습니다.
 
-#### 4.3.7. Nonce
+#### 4.4.8. Nonce
 
 Nonce는 암호화 통신(cryptographic communication)에서 암호가 한 번만 사용되는것을 보장하기위해 사용되는 무작위 숫자입니다. 여기서 사용되는 Nonce는 리플레이 공격(replay attack)을 막는 역할이 있습니다.
 
 PS는 모든 Nonce를 기억할 필요가 없습니다. HMAC의 업데이트 주기 동안만 Nonce를 기억하면 됩니다. 리플레이 공격이 시도되면 HMAC 검증이 실패하기 때문입니다.
 
-## 4.4. QR Code Encoding
+## 4.5. QR Code Encoding
 
 먼저 계산된 결제 토큰을 이진화하고, B64로 인코딩합니다. 그리고 다음 파라미터를 사용하여 QR코드를 생성합니다.
 
@@ -197,21 +206,21 @@ PS는 모든 Nonce를 기억할 필요가 없습니다. HMAC의 업데이트 주
 - 에러 정정 레벨(Error correction level): L, M, Q, H
 - 버전(Symbol Version): 가능한 가장 작은 버전 사용
 
-### 4.4.1. Error Correction Level
+### 4.5.1. Error Correction Level
 
 QR코드는 사용자 기기의 스크린을 통헤 나타납니다. 그리고 기기는 QR의 흑백을 뚜렷하게 구별하기위해 화면 밝기를 최대로 올릴것입니다. 그래서 일반적인 상황에선 에러 정정 레벨을 L또는 M으로 사용해도 문제가 없을 것입니다. 하지만 항상 밝기가 최대로 올라간다고 보장할 순 없습니다. 이런 예외 상황에서만 에러 정정 레벨을 Q또는 H로 사용하도록 설계할 수 있습니다. 이 부분은 실제 사용하는 QR 리더기로 테스트해보며 조절해야합니다.
 
-### 4.4.2. Maximum Version
+### 4.5.2. Maximum Version
 
 QR Code의 버전은 40까지 있지만, 당연히 버전 40짜리 QR을 나태내진 않을것입니다. 그러면 버전은 어디까지 허용하는것이 바람직 할까요? 이 문서에선 버전 13을 최대 버전으로 권장합니다. 이유는 정렬 패턴의 개수입니다. 버전 13까진 QR의 정렬 패턴 개수가 6개이지만 버전 14부턴 패턴의 개수가 13개가 됩니다.
 
-현재 사양으론 버전 13을 넘어가긴 어렵습니다. 하지만 페이로드가 너무 커진다면 [QR code actual binary capacity](../QR%20code%20actual%20binary%20capacity.md)를 참고해주세요. 버전 10 부터 13까지 바이트 모드를 사용했을때 실제로 저장가능한 데이터 용량을 정해두었습니다.
+현재 사양으론 버전 13을 넘어가긴 어렵습니다. 하지만 페이로드가 너무 커진다면 [QR code actual binary capacity](../QR%20code%20actual%20binary%20capacity.md)를 참고해주세요. 버전 10 부터 13까지 바이트 모드를 사용했을때 실제로 저장가능한 데이터 용량을 정해두었습니다.-------------------------------------------------
 
-## Annex A - Example
+## Annex A - Example (need update for 0.3.0)
 
-### 1. Prefix
+### 1. Payload Format Indicator
 
-hex값 `44 50`을 접두사로 사용합니다.
+hex값 `4c 50`을 페이로드 포멧 지시자로 사용합니다.
 
 ```text
 00000000: 44 50                                            DP
