@@ -1,6 +1,6 @@
 # Local Generated Pay Token
 
-Document Version: 0.3.0
+Document Version: 0.3.1
 
 ## Tabel of Contents
 
@@ -116,7 +116,7 @@ CD는 PS로 부터 암호키를 받기위해 안전한 전송 프로토콜을 �
     - Payload Format Indicator (페이로드 포멧 지시자)
     - Application Identifier (애플리케이션 식별자)
     - Version (버전)
-- Auth Type (인증 유형)
+    - Auth Type (인증 유형)
 - User Identifier (사용자 식별자)
 - Encrypted payload
     - Device Identifier (기기 식별자)
@@ -214,7 +214,7 @@ QR코드는 사용자 기기의 스크린을 통헤 나타납니다. 그리고 �
 
 QR Code의 버전은 40까지 있지만, 당연히 버전 40짜리 QR을 나태내진 않을것입니다. 그러면 버전은 어디까지 허용하는것이 바람직 할까요? 이 문서에선 버전 13을 최대 버전으로 권장합니다. 이유는 정렬 패턴의 개수입니다. 버전 13까진 QR의 정렬 패턴 개수가 6개이지만 버전 14부턴 패턴의 개수가 13개가 됩니다.
 
-현재 사양으론 버전 13을 넘어가긴 어렵습니다. 하지만 페이로드가 너무 커진다면 [QR code actual binary capacity](../QR%20code%20actual%20binary%20capacity.md)를 참고해주세요. 버전 10 부터 13까지 바이트 모드를 사용했을때 실제로 저장가능한 데이터 용량을 정해두었습니다.-------------------------------------------------
+현재 사양으론 버전 13을 넘어가긴 어렵습니다. 하지만 페이로드가 너무 커진다면 [QR code actual binary capacity](../QR%20code%20actual%20binary%20capacity.md)를 참고해주세요. 버전 10 부터 13까지 바이트 모드를 사용했을때 실제로 저장가능한 데이터 용량을 정해두었습니다.
 
 ## Annex A - Example (need update for 0.3.0)
 
