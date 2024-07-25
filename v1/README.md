@@ -28,7 +28,7 @@ Local Generated Pay Token(로컬 생성 결제 토큰)은 사용자 기기가 �
 ## 2. Normative References
 
 - [모바일 지금수단 표준-QR코드](archive/모바일%20직불서비스%20표준%20-%20QR코드.pdf)(2018/12)
-- [KS X ISO/IEC 18004](https://standard.go.kr/streamdocs/view/sd;streamdocsId=72059307369834348) - 자동인식 및 데이터 획득 기술 - 기호 사양 - QR 코드
+- KS X ISO/IEC 18004 - 자동인식 및 데이터 획득 기술 - 기호 사양 - QR 코드
 
 ## 3. Abbreviations
 
