@@ -1,6 +1,6 @@
 # Local Generated Pay Token
 
-Document Version: 0.3.1
+Document Version: 0.3.2
 
 ## Tabel of Contents
 
@@ -117,7 +117,8 @@ CD는 PS로 부터 암호키를 받기위해 안전한 전송 프로토콜을 �
     - Application Identifier (애플리케이션 식별자)
     - Version (버전)
     - Auth Type (인증 유형)
-- User Identifier (사용자 식별자)
+- Common Payload
+    - User Identifier (사용자 식별자)
 - Encrypted payload
     - Device Identifier (기기 식별자)
     - Payment Method Identifier (결제 수단 식별자)
