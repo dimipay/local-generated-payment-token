@@ -1,6 +1,6 @@
 # Local Generated Pay Token
 
-Document Version: 0.3.2
+Document Version: 0.3.3
 
 ## Tabel of Contents
 
@@ -116,14 +116,18 @@ CD는 PS로 부터 암호키를 받기위해 안전한 전송 프로토콜을 �
     - Payload Format Indicator (페이로드 포멧 지시자)
     - Application Identifier (애플리케이션 식별자)
     - Version (버전)
-    - Auth Type (인증 유형)
 - Common Payload
+    - Auth Type (인증 유형)
     - User Identifier (사용자 식별자)
-- Encrypted payload
+- private payload (Encrypted payload)
     - Device Identifier (기기 식별자)
     - Payment Method Identifier (결제 수단 식별자)
     - HMAC
     - Nonce
+
+- Metadata: 토큰 자체에 대한 정보를 담습니다.
+- Common: 암호화가 되지 않는 일반 정보입니다.
+- Private: 암호화되는 정보들이 저장됩니다.
 
 #### 4.4.1. Payload Format Indicator
 
