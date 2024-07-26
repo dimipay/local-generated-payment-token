@@ -1,6 +1,6 @@
 # Local Generated Pay Token
 
-Document Version: 0.3.4
+Document Version: 0.3.5
 
 ## Tabel of Contents
 
@@ -13,6 +13,7 @@ Document Version: 0.3.4
     3. Authentication
     4. Payload
     5. QR Code Encoding
+5. License
     
 A. Annex A - Example
 
@@ -218,7 +219,23 @@ QR Code의 버전은 40까지 있지만, 당연히 버전 40짜리 QR을 나태�
 
 현재 사양으론 버전 13을 넘어가긴 어렵습니다. 하지만 페이로드가 너무 커진다면 [QR code actual binary capacity](../QR%20code%20actual%20binary%20capacity.md)를 참고해주세요. 버전 10 부터 13까지 바이트 모드를 사용했을때 실제로 저장가능한 데이터 용량을 정해두었습니다.
 
-## Annex A - Example (need update for 0.3.0)
+## 5. License
+
+    Copyright The local generate payment token Authors.
+    
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+## Annex A - Example (0.3.0 version)
 
 ### 1. Payload Format Indicator
 
