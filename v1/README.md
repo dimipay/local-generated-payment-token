@@ -1,6 +1,6 @@
 # Local Generated Pay Token
 
-Document Version: 0.3.3
+Document Version: 0.3.4
 
 ## Tabel of Contents
 
@@ -202,10 +202,7 @@ PS는 모든 Nonce를 기억할 필요가 없습니다. HMAC의 업데이트 주
 
 ## 4.5. QR Code Encoding
 
-먼저 계산된 결제 토큰을 이진화하고, B64로 인코딩합니다. 그리고 다음 파라미터를 사용하여 QR코드를 생성합니다.
-
-> [!NOTE]
-> B64는 Base64와 같지만 패딩(`=`)을 제거합니다.
+먼저 계산된 결제 토큰을 이진화하고, Base64로 인코딩합니다. 그리고 다음 파라미터를 사용하여 QR코드를 생성합니다.
 
 - 모드(Mode): 확장 채널 해석 모드(ECI)와 바이트 모드
 - 에러 정정 레벨(Error correction level): L, M, Q, H
@@ -348,7 +345,7 @@ Nonce 값으로 16바이트 랜덤 값을 사용하겠습니다.
 00000070: 5B 2F                                            [/
 ```
 
-B64 인코딩 결과는 다음과 같습니다.
+Base64 인코딩 결과는 다음과 같습니다.
 
 ```text
 RFASGDIPrgOdckwZgW0sLR1bfKIMLKvNwIJTCPOIGZb5XIfgLDJZHFAlQgT9k4zQI9kcC4bL8ak48RV0497yiFAqocW9lpanm5yuIygScaRhTJ14PDMnMPqhHKO6MkwC7zoPuRqrBRFhPlRpLhcxLFsv
