@@ -1,6 +1,6 @@
 # Local Generated Pay Token
 
-Document Version: 0.3.5
+Document Version: 0.3.6
 
 ## Tabel of Contents
 
@@ -203,9 +203,9 @@ PS는 모든 Nonce를 기억할 필요가 없습니다. HMAC의 업데이트 주
 
 ## 4.5. QR Code Encoding
 
-먼저 계산된 결제 토큰을 이진화하고, Base64로 인코딩합니다. 그리고 다음 파라미터를 사용하여 QR코드를 생성합니다.
+먼저 계산된 결제 토큰을 이진화하고, Base45로 인코딩합니다. 그리고 다음 파라미터를 사용하여 QR코드를 생성합니다.
 
-- 모드(Mode): 확장 채널 해석 모드(ECI)와 바이트 모드
+- 모드(Mode): Alphanumeric
 - 에러 정정 레벨(Error correction level): L, M, Q, H
 - 버전(Symbol Version): 가능한 가장 작은 버전 사용
 
@@ -362,10 +362,10 @@ Nonce 값으로 16바이트 랜덤 값을 사용하겠습니다.
 00000070: 5B 2F                                            [/
 ```
 
-Base64 인코딩 결과는 다음과 같습니다.
+Base45 인코딩 결과는 다음과 같습니다.
 
 ```text
-RFASGDIPrgOdckwZgW0sLR1bfKIMLKvNwIJTCPOIGZb5XIfgLDJZHFAlQgT9k4zQI9kcC4bL8ak48RV0497yiFAqocW9lpanm5yuIygScaRhTJ14PDMnMPqhHKO6MkwC7zoPuRqrBRFhPlRpLhcxLFsv
+SS8.C2ZE6.:LV+J-R9DGGEQ50W31YFBO1GWL7FOGMAJZUPA3QNV:7HJQ5.BB.5APF8P2W3 H.N4OO3$1HZOU.872W2E SXTU26ADKKO/N22JBUJT0M/25MGENDC$+JLR7..4 UV-R3BONIR9.AUK:1WG3$S09DC9UA9$5X96XNB
 ```
 
 ### 7. QR Code
@@ -375,4 +375,4 @@ QR 코드를 생성하기위해 다음 파라미터를 사용합니다.
 - Mode: byte
 - Error Correction Level: L
 
-![result](./static/result.png)
+![result](./static/result.webp)
