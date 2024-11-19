@@ -12,27 +12,40 @@
 
   - Auth Type (인증 유형)
   - User Identifier (사용자 식별자)
+  - Payment Method Identifier (결제 수단 식별자)
 
 - Private Payload/Encrypted Payload
 
   - Auth Token (인증 토큰)
   - Device Identifier (기기 식별자)
-  - Payment Method Identifier (결제 수단 식별자)
   - Nonce
 
 메타데이터 페이로드를 제외한 모든 페이로드는 [TLV](./TLV.md) 포멧을 사용합니다. 페이로드에서 TLV 블록의 순서는 중요하지 않습니다.
 
 전체 페이로드는 메타데이터 페이로드, 일반 페이로드, 프라이빗 페이로드 순서로 결합시켜 완성합니다.
 
+### Payload Length Indicator (PLI)
+
+메타데이터 페이로드를 제외한 모든 페이로드의 가장 앞에는 Payload Length Indicator가 반드시 있어야 합니다.
+Payload Length Indicator 역시 TLV 블록이며, 페이로드의 바이트수를 나타냅니다.
+
+결제 서버는 패이로드가 기대되는 순서에서 Payload Length Indicator를 찾을 수 없으면 오류를 반환해야 합니다.
+
+예를들어 Common Payload가 1 바이트의 Auth Type 값, 16 바이트의 User Identifier, 1 바이트의 Payment Method Identifier를 포함한다면, 총 페이로드의 크기는 21((1+1) + (1+16) + (1+1)) 바이트 이므로, 다음과 같이 나타낼 수 있습니다.
+
+```text
+  0111   0000  0001 0101   [ Auth Type TLV ] [User Identifier TLV] ..
+├ tag ┘└ len ┘└   value  ┤
+└  Length Indicator TLV  ┘
+```
+
 ## Metadata Payload
 
-메타데이터 페이로드는 예외적으로 TLV 포멧을 사용하지 않고, 미리 정의된 페이로드 포멧을 따라야 합니다.
+메타데이터 페이로드는 예외적으로 PLI를 포함한 TLV 포멧을 사용하지 않고, 미리 정의된 페이로드 포멧을 따릅니다. 고정된 순서로 필드를 배치하면 미리 base45 인코딩 값을 계산하여 빠르게 토큰 검사가 가능하기 때문입니다.
 
 ### Payload Format Indicator
 
 페이로드 포멧 지시자는 토큰이 LGPT임을 나타내냅니다. `0x4c 0x50` 값을 사용합니다.
-
-Base45는 2바이트씩 묶어 인코딩하므로 2n 바이트를 사용해야 미리 인코딩 값을 알 수 있어 빠른 토큰 유효성 검사가 가능합니다.
 
 ### Application Identifier
 
@@ -81,6 +94,17 @@ Base45는 2바이트씩 묶어 인코딩하므로 2n 바이트를 사용해야 �
 
 > [!NOTE]
 > UUID는 [Common#UUID](./Common.md#uuid)를 참고하여 처리 해주새요.
+> 
+### Payment Method Identifier
+
+결제 수단은 실물 카드, 포인트 머니, 상품권 등 PS가 처리할 수 있는 결제 모든 현태의 지급 수단을 뜻합니다. 각 결제 수단은 고유 식별자(ID)가 주어저야 합니다. 식별자는 결제 시스템 전역에서 유일할 수도 있지만, 사용자 수준에서만 식별할 수 있어도 괜찮습니다. 토큰의 길이를 줄이기 위해 식별자를 등록 시퀀스로 정하는 것도 좋은 선택입니다. 
+
+| Global Identifier |          | User-level Identifier |     |
+| ----------------- | -------- | --------------------- | --- |
+| Client            | PMI      | Client                | PMI |
+| dc71a00b          | 33429c1e | dc71a00b              | 2   |
+| dc71a00b          | 4b7b81dd | dc71a00b              | 3   |
+| e86b6327          | 320fae03 | e86b6327              | 2   |
 
 ## Private Payload / Encrypted Payload
 
@@ -94,16 +118,6 @@ Base45는 2바이트씩 묶어 인코딩하므로 2n 바이트를 사용해야 �
 
 사용자 식별자와 연결된 기기 식별자는 다른 기기에서 로그인 또는 원격으로 기기를 로그아웃한 경우, 결제를 진행하지 않도록 하기 위해 사용됩니다.
 
-### Payment Method Identifier
-
-결제 수단은 실물 카드, 포인트 머니, 상품권 등 PS가 처리할 수 있는 결제 모든 현태의 지급 수단을 뜻합니다. 각 결제 수단은 고유 식별자(ID)가 주어저야 합니다. 식별자는 결제 시스템 전역에서 유일할 수도 있지만, 사용자 수준에서만 식별할 수 있어도 괜찮습니다. 토큰의 길이를 줄이기 위해 식별자를 등록 시퀀스로 정하는 것도 좋은 선택입니다. 
-
-| Global Identifier |          | User-level Identifier |     |
-| ----------------- | -------- | --------------------- | --- |
-| Client            | PMI      | Client                | PMI |
-| dc71a00b          | 33429c1e | dc71a00b              | 2   |
-| dc71a00b          | 4b7b81dd | dc71a00b              | 3   |
-| e86b6327          | 320fae03 | e86b6327              | 2   |
 
 ### Nonce
 

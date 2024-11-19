@@ -1,3 +1,8 @@
+### 0.4.1.
+
+- Payment Method Idenfitier를 Common payload로 이동
+- Payload Length Indicator TLV 도입
+
 ## 0.4.0
 
 - deprecate 0.3

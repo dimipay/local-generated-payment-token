@@ -18,6 +18,8 @@ TLV는 페이로드 값을 유연하게 저장하고 확장하기위해 v0.4부�
 > [!NOTE]
 > 메타데이터 페이로드는 예외적으로 TLV 포멧을 사용하지 않습니다.
 
+알려지지 않은 Tag가 사용되면 결제 서버는 이를 무시하지 않고 오류를 반환해야 합니다.
+
 ## Tag
 
 태그(Tag)는 `tl`의 앞 4비트에 표현됩니다. 사용할 수 있는 태그의 수는 16개이고, 이는 현재 사양에서 사용하는 값들(device id, user id 등)을 구분하기에 충분합니다.
@@ -32,6 +34,7 @@ TLV는 페이로드 값을 유연하게 저장하고 확장하기위해 v0.4부�
 | 4         | 0100      | Device Identifier         |
 | 5         | 0101      | Payment Method Identifier |
 | 6         | 0110      | Nonce                     |
+| 7         | 0111      | Payload Length Indicator  |
 
 ## Length
 

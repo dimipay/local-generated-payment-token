@@ -20,10 +20,10 @@ hex값 `4c 50`을 페이로드 포멧 지시자로 사용합니다.
 
 ### Version
 
-버전 `0.3`은 hex값 `0x03`으로 나타냅니다.
+버전 `0.4`는 hex값 `0x04`으로 나타냅니다.
 
 ```text
-00000000: 4C 50 44 50 FF FF 03                             LPDP...
+00000000: 4C 50 44 50 FF FF 04                             LPDP...
 ```
 
 ## Common Payload
@@ -46,13 +46,31 @@ hex값 `4c 50`을 페이로드 포멧 지시자로 사용합니다.
 └ tag ┘└ len ┘└         value        ┘
 ```
 
-### Build Common Payload
+### Payment Method Identifier
 
-계산된 TLV 블록을 연결하여 Common Payload를 완성합니다. TLV 블록을 연결하는 순서는 상관 없습니다.
+결제 수단 사용자 수준에서 시퀀스로 구분되는 시스템이라고 가정해보겠습니다. 사용자가 두 번째 결제 수단을 선택했다고하면 `0x01` 값을 사용합니다.
 
 ```text
-00000000: 10 10 34 32 0F AE 03 9D 72 4C 19 81 6D 2C 2D 1D  ..42....rL..m,-.
-00000010: 5B 7C A2                                         [|.
+  0101   0000     0x01     →  [0x50, 0x01]
+└ tag ┘└ len ┘└  value  ┘ 
+```
+
+### Payload Length Indicator
+
+모든 TLV의 크기는 21 바이트 이므로 Payload Length Indicator는 다음과 같이 설정합니다.
+
+```text
+  0111   0000     0x15     →  [0x70, 0x15]
+└ tag ┘└ len ┘└  value  ┘ 
+```
+
+### Build Common Payload
+
+Payload Length Indicator TLV를 가장 앞에 위치시키고, 나머지 TLV는 순서에 관계없이 연결합니다.
+
+```text
+00000000: 70 15 10 10 34 32 0F AE 03 9D 72 4C 19 81 6D 2C  p...42....rL..m,
+00000010: 2D 1D 5B 7C A2                                   -.[|.
 ```
 
 ## Private Payload / Encrypted Payload
@@ -66,22 +84,13 @@ Auth token은 `adca79ec-7934-433c-acc0-a23088f39f58`이라고 하겠습니다.
 └ tag ┘└ len ┘└         value        ┘
 ```
 
-#### Device Identifier
+### Device Identifier
 
 기기 식별자는 `265bed1a-9b4a-47fc-8765-b421d67a1458`라고 하겠습니다.
 
 ```text
   0010   0100  0x26 0x5b 0xed .. 0x58    →  [0x24, 0x26, 0x5b, .. ,0x58]
 └ tag ┘└ len ┘└         value        ┘
-```
-
-#### Payment Method Identifier
-
-결제 수단 사용자 수준에서 시퀀스 숫자로 구분되는 시스템이라고 가정해보겠습니다. 사용자가 두 번째 결제 수단을 선택했다고하면 `0x01` 값을 사용합니다.
-
-```text
-  0101   0000     0x01     →  [0x50, 0x01]
-└ tag ┘└ len ┘└  value  ┘ 
 ```
 
 ### Nonce
@@ -93,21 +102,30 @@ Auth token은 `adca79ec-7934-433c-acc0-a23088f39f58`이라고 하겠습니다.
 └ tag ┘└ len ┘└         value        ┘
 ```
 
-### Build Private Payload
+### Payload Length Indicator
 
-계산한 TLV 블록을 연결하여 Private Payload를 완성합니다. TLV 블록을 연결하는 순서는 상관 없습니다.
+모든 TLV의 크기는 51 바이트 이므로 Payload Length Indicator는 다음과 같이 설정합니다.
 
 ```text
-00000000: 24 AD CA 79 EC 79 34 43 3C AC C0 A2 30 88 F3 9F  $..y.y4C<...0...
-00000010: 58 44 26 5B ED 1A 9B 4A 47 FC 87 65 B4 21 D6 7A  XD&[...JG..e.!.z
-00000020: 14 58 50 01 64 AD 05 B8 EB 11 2C 9D 7B AD 79 F8  .XP.d.....,.{.y.
+  0111   0000     0x33     →  [0x70, 0x33]
+└ tag ┘└ len ┘└  value  ┘ 
+```
+
+### Build Private Payload
+
+Payload Length Indicator TLV를 가장 앞에 위치시키고, 나머지 TLV는 순서에 관계없이 연결합니다.
+
+```text
+00000000: 70 33 24 AD CA 79 EC 79 34 43 3C AC C0 A2 30 88  p3$..y.y4C<...0.
+00000010: F3 9F 58 44 26 5B ED 1A 9B 4A 47 FC 87 65 B4 21  ..XD&[...JG..e.!
+00000020: D6 7A 14 58 64 AD 05 B8 EB 11 2C 9D 7B AD 79 F8  .z.Xd.....,.{.y.
 00000030: 9C E4 E2 83 19                                   .....
 ```
 
 raw:
 
 ```text
-24adca79ec7934433cacc0a23088f39f5844265bed1a9b4a47fc8765b421d67a1458500164ad05b8eb112c9d7bad79f89ce4e28319
+703324adca79ec7934433cacc0a23088f39f5844265bed1a9b4a47fc8765b421d67a145864ad05b8eb112c9d7bad79f89ce4e28319
 ```
 
 ## Encryption
@@ -131,7 +149,7 @@ $$
 tmp = hkdf_sha384(
   len = 56,
   ikm = c0093def64d3b1880da182de861cec39, // 바이너리 값입니다.
-  info = 'local-generated-payment-token506440433', // utf8 문자열 입니다.
+  info = 'local-generated-payment-token506440433', // utf8 문자열입니다.
   salt = 320fae039d724c19816d2c2d1d5b7ca2 // 바이너리 값입니다.
 )
 
@@ -156,17 +174,17 @@ e = xchacha20poly1305_encrypt(
 암호화 결과는 다음과 같습니다.
 
 ```text
-00000000: 27 86 DD 2A 13 B4 2A B3 92 18 64 B5 EB 1E AE C0  '..*..*...d.....
-00000010: FF 38 8A 2D 46 99 6F 39 7A E4 A7 12 83 06 40 F9  .8.-F.o9z.....@.
-00000020: B8 00 E9 C0 B8 55 5E AB 5D 67 E5 5E 62 3B 75 7A  .....U^.]g.^b;uz
-00000030: 07 69 A4 2C 3C 83 F3 92 8D B3 65 8A 5E A1 75 81  .i.,<.....e.^.u.
-00000040: 04 92 86 8A 9A                                   .....
+00000000: 73 18 33 FE 35 B4 F2 89 9A F7 98 BB 1B 34 6D D7  s.3.5........4m.
+00000010: 54 E3 F4 32 8D D8 19 69 A6 52 67 8B B0 42 22 A2  T..2...i.Rg..B".
+00000020: 7A 22 AD 99 B8 55 5E AB 5D 67 E5 5E 62 3B 75 7A  z"...U^.]g.^b;uz
+00000030: 07 69 A4 2C 3C 9D 00 D6 04 B6 9A CA 95 53 E3 B6  .i.,<........S..
+00000040: A5 DA CF A4 40                                   ....@
 ```
 
 raw:
 
 ```text
-2786dd2a13b42ab3921864b5eb1eaec0ff388a2d46996f397ae4a712830640f9b800e9c0b8555eab5d67e55e623b757a0769a42c3c83f3928db3658a5ea175810492868a9a
+731833fe35b4f2899af798bb1b346dd754e3f4328dd81969a652678bb04222a27a22ad99b8555eab5d67e55e623b757a0769a42c3c9d00d604b69aca9553e3b6a5dacfa440
 ```
 
 ### 6. Final data
@@ -174,24 +192,25 @@ raw:
 메타이데이 필드, 일반 필드, 암호화된 암호화 필드를 모두 합친 결과는 다음과 같습니다.
 
 ```text
-00000000: 4C 50 44 50 FF FF 03 10 10 34 32 0F AE 03 9D 72  LPDP.....42....r
-00000010: 4C 19 81 6D 2C 2D 1D 5B 7C A2 27 86 DD 2A 13 B4  L..m,-.[|.'..*..
-00000020: 2A B3 92 18 64 B5 EB 1E AE C0 FF 38 8A 2D 46 99  *...d......8.-F.
-00000030: 6F 39 7A E4 A7 12 83 06 40 F9 B8 00 E9 C0 B8 55  o9z.....@......U
-00000040: 5E AB 5D 67 E5 5E 62 3B 75 7A 07 69 A4 2C 3C 83  ^.]g.^b;uz.i.,<.
-00000050: F3 92 8D B3 65 8A 5E A1 75 81 04 92 86 8A 9A     ....e.^.u......
+00000000: 4C 50 44 50 FF FF 04 70 15 10 10 34 32 0F AE 03  LPDP...p...42...
+00000010: 9D 72 4C 19 81 6D 2C 2D 1D 5B 7C A2 73 18 33 FE  .rL..m,-.[|.s.3.
+00000020: 35 B4 F2 89 9A F7 98 BB 1B 34 6D D7 54 E3 F4 32  5........4m.T..2
+00000030: 8D D8 19 69 A6 52 67 8B B0 42 22 A2 7A 22 AD 99  ...i.Rg..B".z"..
+00000040: B8 55 5E AB 5D 67 E5 5E 62 3B 75 7A 07 69 A4 2C  .U^.]g.^b;uz.i.,
+00000050: 3C 9D 00 D6 04 B6 9A CA 95 53 E3 B6 A5 DA CF A4  <........S......
+00000060: 40                                               @
 ```
 
 raw:
 
 ```text
-4c504450ffff03101034320fae039d724c19816d2c2d1d5b7ca22786dd2a13b42ab3921864b5eb1eaec0ff388a2d46996f397ae4a712830640f9b800e9c0b8555eab5d67e55e623b757a0769a42c3c83f3928db3658a5ea175810492868a9a
+4c504450ffff047015101034320fae039d724c19816d2c2d1d5b7ca2731833fe35b4f2899af798bb1b346dd754e3f4328dd81969a652678bb04222a27a22ad99b8555eab5d67e55e623b757a0769a42c3c9d00d604b69aca9553e3b6a5dacfa440
 ```
 
 Base45 인코딩 결과는 다음과 같습니다.
 
 ```text
-6T9SS8FGWJH0822ZE6.:LV+J-R9DGGEQ50W31YF%:48/R4M2-H55LI-WCPWT64M-BW3LHS-8X2E5OFK5LHPGS98YBNZOTTDNP/BG B%:S$ICE%E7.0/XKBT7TZU5-HT$CF/BL%E0Q0H0HJ3
+6T9SS8FGWBP0$T2822ZE6.:LV+J-R9DGGEQ50W31YFYOEZP6NZ6YTUQQJ*DJYJ3**D-WA9*U.-HP9381L24DWCM1H4 JFQ.LTDNP/BG B%:S$ICE%E7.0/XK$T7Y40 Q0QPJM*IJZSN/KBBQJ1
 ```
 
 ### 7. QR Code
