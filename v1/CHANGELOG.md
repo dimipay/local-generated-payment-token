@@ -1,4 +1,11 @@
-### 0.4.1.
+### 0.4.2
+
+- XChaCha20-Poly1305 ad 값 추가
+- Additional Data Tag 추가
+- UUIDv7을 Nonce로 사용
+- README Requirements 추가
+
+### 0.4.1
 
 - Payment Method Idenfitier를 Common payload로 이동
 - Payload Length Indicator TLV 도입

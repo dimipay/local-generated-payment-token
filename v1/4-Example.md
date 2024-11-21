@@ -95,7 +95,7 @@ Auth token은 `adca79ec-7934-433c-acc0-a23088f39f58`이라고 하겠습니다.
 
 ### Nonce
 
-16 바이트 랜덤 값으로 `ad05b8eb112c9d7bad79f89ce4e28319`를 사용하겠습니다.
+UUIDv7를 발급하고 `-`를 제거합니다. `01934f0337777ac38dcb8066c646b7fb`
 
 ```text
   0110   0100  0xad 0x05 0xb8 .. 0x19    →  [0x64, 0xad, 0x05, .. ,0x19]
@@ -118,14 +118,14 @@ Payload Length Indicator TLV를 가장 앞에 위치시키고, 나머지 TLV는 
 ```text
 00000000: 70 33 24 AD CA 79 EC 79 34 43 3C AC C0 A2 30 88  p3$..y.y4C<...0.
 00000010: F3 9F 58 44 26 5B ED 1A 9B 4A 47 FC 87 65 B4 21  ..XD&[...JG..e.!
-00000020: D6 7A 14 58 64 AD 05 B8 EB 11 2C 9D 7B AD 79 F8  .z.Xd.....,.{.y.
-00000030: 9C E4 E2 83 19                                   .....
+00000020: D6 7A 14 58 64 01 93 4F 03 37 77 7A C3 8D CB 80  .z.Xd..O.7wz....
+00000030: 66 C6 46 B7 FB                                   f.F..
 ```
 
 raw:
 
 ```text
-703324adca79ec7934433cacc0a23088f39f5844265bed1a9b4a47fc8765b421d67a145864ad05b8eb112c9d7bad79f89ce4e28319
+703324adca79ec7934433cacc0a23088f39f5844265bed1a9b4a47fc8765b421d67a14586401934f0337777ac38dcb8066c646b7fb
 ```
 
 ## Encryption
@@ -165,26 +165,25 @@ XChaCha20-Poly1305로 암호화합니다.
 e = xchacha20poly1305_encrypt(
   k = 8dd44fadd3d5d574b9c6928a1a363843e0b0b4480a2ffab3ff489359eba16bd0, 
   n = 806d3d1956b30e5263f7bd230628ba54db9971f3b06c556a, 
+  ad: metadata_payload || common_payload || raw_private_payload,
   m = raw_private_payload
 )
 ```
-
-- `n`: 24바이트 랜덤 값
 
 암호화 결과는 다음과 같습니다.
 
 ```text
 00000000: 73 18 33 FE 35 B4 F2 89 9A F7 98 BB 1B 34 6D D7  s.3.5........4m.
 00000010: 54 E3 F4 32 8D D8 19 69 A6 52 67 8B B0 42 22 A2  T..2...i.Rg..B".
-00000020: 7A 22 AD 99 B8 55 5E AB 5D 67 E5 5E 62 3B 75 7A  z"...U^.]g.^b;uz
-00000030: 07 69 A4 2C 3C 9D 00 D6 04 B6 9A CA 95 53 E3 B6  .i.,<........S..
-00000040: A5 DA CF A4 40                                   ....@
+00000020: 7A 22 AD 99 B8 F9 C8 5C B5 41 BE B9 DA 1B C7 02  z".....\.A......
+00000030: FD 4B 00 18 DE 55 54 FB E1 D0 0C 4B 13 BE 05 2D  .K...UT....K...-
+00000040: 75 7E A7 AB 90                                   u~...
 ```
 
 raw:
 
 ```text
-731833fe35b4f2899af798bb1b346dd754e3f4328dd81969a652678bb04222a27a22ad99b8555eab5d67e55e623b757a0769a42c3c9d00d604b69aca9553e3b6a5dacfa440
+731833fe35b4f2899af798bb1b346dd754e3f4328dd81969a652678bb04222a27a22ad99b8f9c85cb541beb9da1bc702fd4b0018de5554fbe1d00c4b13be052d757ea7ab90
 ```
 
 ### 6. Final data
@@ -196,21 +195,21 @@ raw:
 00000010: 9D 72 4C 19 81 6D 2C 2D 1D 5B 7C A2 73 18 33 FE  .rL..m,-.[|.s.3.
 00000020: 35 B4 F2 89 9A F7 98 BB 1B 34 6D D7 54 E3 F4 32  5........4m.T..2
 00000030: 8D D8 19 69 A6 52 67 8B B0 42 22 A2 7A 22 AD 99  ...i.Rg..B".z"..
-00000040: B8 55 5E AB 5D 67 E5 5E 62 3B 75 7A 07 69 A4 2C  .U^.]g.^b;uz.i.,
-00000050: 3C 9D 00 D6 04 B6 9A CA 95 53 E3 B6 A5 DA CF A4  <........S......
-00000060: 40                                               @
+00000040: B8 F9 C8 5C B5 41 BE B9 DA 1B C7 02 FD 4B 00 18  ...\.A.......K..
+00000050: DE 55 54 FB E1 D0 0C 4B 13 BE 05 2D 75 7E A7 AB  .UT....K...-u~..
+00000060: 90                                               .
 ```
 
 raw:
 
 ```text
-4c504450ffff047015101034320fae039d724c19816d2c2d1d5b7ca2731833fe35b4f2899af798bb1b346dd754e3f4328dd81969a652678bb04222a27a22ad99b8555eab5d67e55e623b757a0769a42c3c9d00d604b69aca9553e3b6a5dacfa440
+4c504450ffff047015101034320fae039d724c19816d2c2d1d5b7ca2731833fe35b4f2899af798bb1b346dd754e3f4328dd81969a652678bb04222a27a22ad99b8f9c85cb541beb9da1bc702fd4b0018de5554fbe1d00c4b13be052d757ea7ab90
 ```
 
 Base45 인코딩 결과는 다음과 같습니다.
 
 ```text
-6T9SS8FGWBP0$T2822ZE6.:LV+J-R9DGGEQ50W31YFYOEZP6NZ6YTUQQJ*DJYJ3**D-WA9*U.-HP9381L24DWCM1H4 JFQ.LTDNP/BG B%:S$ICE%E7.0/XK$T7Y40 Q0QPJM*IJZSN/KBBQJ1
+6T9SS8FGWBP0$T2822ZE6.:LV+J-R9DGGEQ50W31YFYOEZP6NZ6YTUQQJ*DJYJ3**D-WA9*U.-HP9381L24DWCM1H4 JFQ.LDHN$EP6-M05OZPR67P/0WO00$4SKXASOS.O1EM2KT0I%E%8L93
 ```
 
 ### 7. QR Code
