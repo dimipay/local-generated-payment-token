@@ -60,9 +60,9 @@ e = xchacha20_poly1305_encrypt(
   message = payload,
   key = k,
   nonce = n
-  ad = metadata_payload || common_payload || private_payload
+  ad = metadata_payload || common_payload
 );
 ```
 
 - `||`는 문자열 결합자입니다.
-- `ad`(Associated Data)는 메타데이터 페이로드, 일반 페이로드, 암호화 페이로드 순서로 결합시킨 값입니다.
+- `ad`(Associated Data)는 메타데이터 페이로드, 일반 페이로드를 결합시킨 값입니다.

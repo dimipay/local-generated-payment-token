@@ -1,3 +1,7 @@
+### 0.4.3
+
+- ad에 raw_private_payload값 삭제
+
 ### 0.4.2
 
 - XChaCha20-Poly1305 ad 값 추가
