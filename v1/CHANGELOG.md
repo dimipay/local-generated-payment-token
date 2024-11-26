@@ -1,3 +1,7 @@
+### 0.4.4
+
+- `Online Auth` auth type 추가
+
 ### 0.4.3
 
 - ad에 raw_private_payload값 삭제

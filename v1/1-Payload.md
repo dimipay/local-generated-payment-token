@@ -100,6 +100,7 @@ Payload Length Indicator 역시 TLV 블록이며, 페이로드의 바이트수�
 | `0001 1001(0x19)` | Fingerprint Auth | bio auth의 하위 타입   |
 | `0001 1010(0x1a)` | Face Auth        | bio auth의 하위 타입   |
 | `0001 1011(0x1b)` | Iris Auth        | bio auth의 하위 타입   |
+| `0010 0000(0x20)` | Online Auth      | 온라인 인증            |
 
 사용자 정의 유형은 `1xxx xxxx` 형식을 사용합니다. `1000 0001(0x81)`과 같이 정의할 수 있습니다.
 
