@@ -1,3 +1,8 @@
+### 0.4.5
+
+- 카운터 계산 오류 수정
+- Implementation Guide 추가
+
 ### 0.4.4
 
 - `Online Auth` auth type 추가

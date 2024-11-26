@@ -13,7 +13,7 @@
 카운터는 토큰 자동 만료를 구현하기 사용되며, 30초 마다 갱신됩니다.
 
 $$
-C=\left\lfloor {\frac {T-T_{0}}{30}}\right\rfloor
+C=\left\lfloor {\frac {T-T_{0}}{30\cdot1000}}\right\rfloor
 $$
 
 여기서 T는 현재 Unix Epoch, T0는 선택한 결제 수단의 생성 Unix Epoch, Tx는 메서드 카운터 업데이트 주기입니다. T0는 사전에 결제 서버로 부터 받아와 사용자 기기에 안전하게 저장해야 합니다.

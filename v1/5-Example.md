@@ -140,7 +140,7 @@ raw:
   - `T0`: 1705896544745
 
 $$
-C=\left\lfloor {\frac {T-T_{0}}{30}}\right\rfloor=\left\lfloor {\frac {1721089757738-1705896544745}{30}}\right\rfloor=506440433
+C=\left\lfloor {\frac {T-T_{0}}{30\cdot1000}}\right\rfloor=\left\lfloor {\frac {1721089757738-1705896544745}{30\cdot1000}}\right\rfloor=506440
 $$
 
 - `len`: 56
@@ -149,7 +149,7 @@ $$
 tmp = hkdf_sha384(
   len = 56,
   ikm = c0093def64d3b1880da182de861cec39, // 바이너리 값입니다.
-  info = 'local-generated-payment-token506440433', // utf8 문자열입니다.
+  info = 'local-generated-payment-token506440', // utf8 문자열입니다.
   salt = 320fae039d724c19816d2c2d1d5b7ca2 // 바이너리 값입니다.
 )
 
@@ -173,17 +173,17 @@ e = xchacha20poly1305_encrypt(
 암호화 결과는 다음과 같습니다.
 
 ```text
-00000000: 73 18 33 FE 35 B4 F2 89 9A F7 98 BB 1B 34 6D D7  s.3.5........4m.
-00000010: 54 E3 F4 32 8D D8 19 69 A6 52 67 8B B0 42 22 A2  T..2...i.Rg..B".
-00000020: 7A 22 AD 99 B8 F9 C8 5C B5 41 BE B9 DA 1B C7 02  z".....\.A......
-00000030: FD 4B 00 18 DE 25 FA 92 38 35 57 11 A8 82 0C E3  .K...%..85W.....
-00000040: 3F 56 74 28 CC                                   ?Vt(.
+00000000: 0C 17 F8 0A F5 27 C7 75 0E 36 B9 9F C2 4F E0 06  .....'.u.6...O..
+00000010: C8 35 AB 3B E6 67 C4 B7 3B 24 D3 25 2A AF DE C0  .5.;.g..;$.%*...
+00000020: D4 9B AB 73 26 1C 2F 8F B9 FC 3A 39 70 26 A1 63  ...s&./...:9p&.c
+00000030: 13 93 78 C1 B9 67 1E AE 9B FC B0 71 74 59 AA EF  ..x..g.....qtY..
+00000040: 4F 8D 5A 85 41                                   O.Z.A
 ```
 
 raw:
 
 ```text
-731833fe35b4f2899af798bb1b346dd754e3f4328dd81969a652678bb04222a27a22ad99b8f9c85cb541beb9da1bc702fd4b0018de25fa9238355711a8820ce33f567428cc
+0c17f80af527c7750e36b99fc24fe006c835ab3be667c4b73b24d3252aafdec0d49bab73261c2f8fb9fc3a397026a163139378c1b9671eae9bfcb0717459aaef4f8d5a8541
 ```
 
 ### 6. Final data
@@ -192,24 +192,24 @@ raw:
 
 ```text
 00000000: 4C 50 44 50 FF FF 04 70 15 10 10 34 32 0F AE 03  LPDP...p...42...
-00000010: 9D 72 4C 19 81 6D 2C 2D 1D 5B 7C A2 50 01 73 18  .rL..m,-.[|.P.s.
-00000020: 33 FE 35 B4 F2 89 9A F7 98 BB 1B 34 6D D7 54 E3  3.5........4m.T.
-00000030: F4 32 8D D8 19 69 A6 52 67 8B B0 42 22 A2 7A 22  .2...i.Rg..B".z"
-00000040: AD 99 B8 F9 C8 5C B5 41 BE B9 DA 1B C7 02 FD 4B  .....\.A.......K
-00000050: 00 18 DE 25 FA 92 38 35 57 11 A8 82 0C E3 3F 56  ...%..85W.....?V
-00000060: 74 28 CC                                         t(.
+00000010: 9D 72 4C 19 81 6D 2C 2D 1D 5B 7C A2 50 01 0C 17  .rL..m,-.[|.P...
+00000020: F8 0A F5 27 C7 75 0E 36 B9 9F C2 4F E0 06 C8 35  ...'.u.6...O...5
+00000030: AB 3B E6 67 C4 B7 3B 24 D3 25 2A AF DE C0 D4 9B  .;.g..;$.%*.....
+00000040: AB 73 26 1C 2F 8F B9 FC 3A 39 70 26 A1 63 13 93  .s&./...:9p&.c..
+00000050: 78 C1 B9 67 1E AE 9B FC B0 71 74 59 AA EF 4F 8D  x..g.....qtY..O.
+00000060: 5A 85 41                                         Z.A
 ```
 
 raw:
 
 ```text
-4c504450ffff047015101034320fae039d724c19816d2c2d1d5b7ca25001731833fe35b4f2899af798bb1b346dd754e3f4328dd81969a652678bb04222a27a22ad99b8f9c85cb541beb9da1bc702fd4b0018de25fa9238355711a8820ce33f567428cc
+4c504450ffff047015101034320fae039d724c19816d2c2d1d5b7ca250010c17f80af527c7750e36b99fc24fe006c835ab3be667c4b73b24d3252aafdec0d49bab73261c2f8fb9fc3a397026a163139378c1b9671eae9bfcb0717459aaef4f8d5a8541
 ```
 
 Base45 인코딩 결과는 다음과 같습니다.
 
 ```text
-6T9SS8FGWBP0$T2822ZE6.:LV+J-R9DGGEQ50W31YF65AYOEZP6NZ6YTUQQJ*DJYJ3**D-WA9*U.-HP9381L24DWCM1H4 JFQ.LDHN$EP6-M05OZPR67P/0WO00Y3SLUVY47E0BSDLES1E08 UEO4
+6T9SS8FGWBP0$T2822ZE6.:LV+J-R9DGGEQ50W31YF65AZN13GVT:UV9P%Z1:KNIPOKES/DP5TLX5T4*OKL78VQ$H597SM*QGUL  4P062NNAG708E5IKGL2/BFXJNO*3HWJYDM+VEJRLP2A/JBK1
 ```
 
 ### 7. QR Code

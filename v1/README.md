@@ -1,13 +1,14 @@
 # Local Generated Pay Token
 
-Version: 0.4.4
+Version: 0.4.5
 
 ## Tabel of Contents
 
 1. [Payload](./1-Payload.md)
 2. [Encryption](./2-Encryption.md)
 3. [QR Code Encoding](./3-QR%20Code%20Encoding.md)
-4. [Example](./4-Example.md)
+4. [Implementation Guide](./4-Implementation%20Guide.md)
+5. [Example](./5-Example.md)
 
 ### Miscellaneous
 - [Common](./Common.md)
@@ -17,7 +18,7 @@ Version: 0.4.4
 
 Local Generated Pay Token(로컬 생성 결제 토큰)은 사용자 기기에서 결제 서버나 결제 단말기와의 통신없이 안전한 결제 토큰을 만들기위해 만들어 졌습니다.
 
-로컬 토큰의 가장 큰 목표는 인터넷 사용이 원할하지 않은 환경이라도 빠르고 일정한 결제 속도를 제공하는 것입니다.
+로컬 토큰의 주된 목표는 인터넷 사용이 원할하지 않은 환경이라도 빠르고 일정한 결제 속도를 제공하는 것입니다.
 
 ## Requirements
 
