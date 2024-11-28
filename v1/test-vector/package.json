@@ -1,6 +1,6 @@
 {
-  "name": "sample",
-  "module": "index.ts",
+  "name": "test-vector-generator",
+  "module": "generate.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest",
