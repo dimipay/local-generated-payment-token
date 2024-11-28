@@ -153,8 +153,8 @@ tmp = hkdf_sha384(
   salt = 320fae039d724c19816d2c2d1d5b7ca2 // 바이너리 값입니다.
 )
 
-k = tmp[0:32] = 8dd44fadd3d5d574b9c6928a1a363843e0b0b4480a2ffab3ff489359eba16bd0
-n = tmp[32:] = 806d3d1956b30e5263f7bd230628ba54db9971f3b06c556a
+k = tmp[0:32] = cf6fcb3780cba30a8f903841d19265d73cbc09a8b70eb16ba6dd51a2bb76d0c5
+n = tmp[32:] = bd0ca49567a46cf892279fd6c9b3cb31b6a4c654827d0b67
 ```
 
 ### Encrypt
@@ -163,8 +163,8 @@ XChaCha20-Poly1305로 암호화합니다.
 
 ```text
 e = xchacha20poly1305_encrypt(
-  k = 8dd44fadd3d5d574b9c6928a1a363843e0b0b4480a2ffab3ff489359eba16bd0, 
-  n = 806d3d1956b30e5263f7bd230628ba54db9971f3b06c556a, 
+  k = cf6fcb3780cba30a8f903841d19265d73cbc09a8b70eb16ba6dd51a2bb76d0c5, 
+  n = bd0ca49567a46cf892279fd6c9b3cb31b6a4c654827d0b67, 
   ad: metadata_payload || common_payload,
   m = raw_private_payload
 )
