@@ -1,0 +1,19 @@
+{
+  "name": "sample",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^22.10.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@dimipay/bqencode": "^0.1.1",
+    "@stablelib/hkdf": "^2.0.0",
+    "@stablelib/sha384": "^2.0.0",
+    "@stablelib/xchacha20poly1305": "^2.0.0",
+    "uuidv7": "^1.0.2"
+  }
+}
