@@ -106,9 +106,8 @@ export function createToken(params: Params) {
 
   // final
   const final = Buffer.concat([params.metadata, commonPayload, encryptedPrivatePayload])
-  const encoded = base45.encode(final)
 
-  return encoded
+  return base45.encode(final)
 }
 
 function buildPayload(tlvs: Buffer[]): Buffer {

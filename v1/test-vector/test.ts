@@ -12,7 +12,7 @@ const params = new Params({
   deviceIdentifier: '265bed1a9b4a47fc8765b421d67a1458', 
   nonce: '01934f0337777ac38dcb8066c646b7fb',
 
-  t: 1721089757738,
+  t: 1721089784745,
   t0: 1705896544745,
   rootKey: 'c0093def64d3b1880da182de861cec39'
 })

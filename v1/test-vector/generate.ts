@@ -17,6 +17,7 @@ interface Report {
   t0: number
   rk: string
   result: string
+  timeLeftInStep: number
 }
 
 const reports: Report[] = []
@@ -200,6 +201,11 @@ const params: Params[] = [
 ]
 
 for (const param of params) {
+  const c = calculateCounter(param.t, param.t0)
+  const cst = currentStepStartTime(param.t0, c)
+  const te = timeElapsedInStep(param.t, cst)
+  const tl = timeLeftInStep(te)
+
   const report: Report = {
     metadata: param.metadata.toString('hex'),
     common: {
@@ -215,6 +221,7 @@ for (const param of params) {
     rk: param.rootKey.toString('hex'),
     t: param.t,
     t0: param.t0,
+    timeLeftInStep: te,
 
     result: createToken(param),
   }
@@ -222,3 +229,19 @@ for (const param of params) {
 }
 
 await Bun.write('./test-vectors.json', JSON.stringify(reports, null, 2))
+
+function calculateCounter(t: number, t0: number): number {
+  return Math.floor((t - t0) / 30_000)
+}
+
+function currentStepStartTime(t0: number, c: number): number {
+  return t0 + c * 30_000
+}
+
+function timeElapsedInStep(t: number, currentStepStartTime: number): number {
+  return t - currentStepStartTime
+}
+
+function timeLeftInStep(timeElapsedInStep: number): number {
+  return 30_000 - timeElapsedInStep
+}
