@@ -8,8 +8,8 @@ Time-step window에 관해선 [RFC6238#section-5.2](https://datatracker.ietf.org
 
 ```text
   ──┐┌──     30s     ──┐┌──     30s     ──┐┌──     30s     ──┐
-   }{      506440     }{      506441     }{      506442     }
-window ─┘            └─── time-step window ───┘            └──
+    }{      506440     }{      506441     }{      506442     }
+window ─┘            └─── time-step window ──┘            └──
 ```
 
 구현에 따라 달라질 수 있지만, 사양은 ±10초를 기본값으로 정합니다.
