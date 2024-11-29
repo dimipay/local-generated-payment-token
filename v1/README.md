@@ -1,14 +1,15 @@
 # Local Generated Pay Token
 
-Version: 0.4.6
+Version: 0.4.7
 
 ## Tabel of Contents
 
 1. [Payload](./1-Payload.md)
 2. [Encryption](./2-Encryption.md)
 3. [QR Code Encoding](./3-QR%20Code%20Encoding.md)
-4. [Implementation Guide](./4-Implementation%20Guide.md)
-5. [Example](./5-Example.md)
+4. [Timing](./4-Timing.md)
+5. [Implementation Guide](./5-Implementation%20Guide.md)
+6. [Example](./6-Example.md)
 
 ### Miscellaneous
 - [Common](./Common.md)
