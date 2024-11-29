@@ -221,7 +221,7 @@ for (const param of params) {
     rk: param.rootKey.toString('hex'),
     t: param.t,
     t0: param.t0,
-    timeLeftInStep: te,
+    timeLeftInStep: tl,
 
     result: createToken(param),
   }
