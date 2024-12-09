@@ -218,5 +218,6 @@ QR 코드를 생성하기위해 다음 파라미터를 사용합니다.
 
 - Mode: Alphanumeric
 - Error Correction Level: L
+- Version: 5
 
 ![result](./static/result.png)

@@ -15,3 +15,7 @@ QR코드는 사용자 기기의 스크린을 통해 나타납니다. 그리고 �
 QR 코드의 버전은 13을 넘기지 않을 것을 권장합니다. Base45 인코딩을 사용하면 오류 레벨이 L일 때 버전 13의 QR 코드에서 최대 412바이트를 저장할 수 있습니다.
 
 QR 코드 용량과 인코딩에 대한 자세한 내용은 [QR 코드에 최대한 많이 때려 넣기](https://blog.javien.dev/6)를 참고해 주세요.
+
+## Get the best version
+
+오류 정정 레벨과 모드에 따른 용량은 [qrcode.com](https://www.qrcode.com/en/about/version.html)에서 참고해 주세요.
