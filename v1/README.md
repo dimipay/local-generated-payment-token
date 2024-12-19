@@ -1,6 +1,6 @@
 # Local Generated Pay Token
 
-Version: 0.4.7
+Version: 1.0.0
 
 ## Tabel of Contents
 
